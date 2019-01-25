@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Elga lisäainehaku</string>
+    <string name="haun_tulos"></string>
+    <string name="haku">Kilpailijan lisäaine tähän.</string>
+</resources>
