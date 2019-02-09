@@ -1,11 +1,11 @@
 # AdditiveFinder android app
 
 Tehty Android studio sovelluskehityösympäristöllä.
-HTTP GET metodi toimii, muuta en ole kerennyt implementoida. Tehty nykyistä työpaikkaa varten myynnin työtä helpottamaan.
-Tarkoituksena on, että myyjä voisi paikan päällä löytää kilpailijan tuotteelle korvaavan tuotteen sovelluksen avulla.
+Ohjelma noutaa HTTP GET metodilla JSON listan Additivefinder-Apilta. Api pyörii Raspissa ja on kirjoitettu Javalla (Spring Boot app). JSON lista sisältää tiedot kilpailijoiden lisäaineista.Ohjelma luo oman H2 tietokannan käynnistyksen yhteydessä (mikäli tietokantaa ei ole olemassa) ja päivittää JSON listan datat sinne (Tämä on vielä kesken). 
 
-Tuotetiedot tullaan tallentamaan erilliseen MySQL tietokantaan ja backendinä tulee toimimaan (Javalla) Spring Bootilla tehty RESTful service.
-Ideana on, että käynnistäessä applikaatio lataa backendiltä JSON muodossa tuotetiedot ohjelman omaan embedded tietokantaan.
+Tehty nykyistä työpaikkaa varten myynnin työtä helpottamaan. Tarkoituksena on, että myyjä voisi asiakkaiden luona vieraillessa löytää helposti kilpailijan tuotteelle korvaavan tuotteen sovelluksen avulla.
+
+Tuotetiedot on tallennettu erilliseen MySQL tietokantaan, josta ohjelma ne noutaa. HTTP metodikutsuja vastaanottaa Spring Bootilla tehty RESTful service.
 
 Tämä on vielä suht kesken!
 
