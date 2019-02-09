@@ -1,4 +1,5 @@
 package com.example.tommi.additivefinder.httprequests;
+
 import android.content.Context;
 
 import com.android.volley.Request;
@@ -6,11 +7,11 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.tommi.additivefinder.database.DataBaseHelper;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class HttpRequest {
@@ -18,26 +19,26 @@ public class HttpRequest {
     private RequestQueue queue;
     private String url;
 
-    /* Vaihdat vain tämän IP:n rasperry PI:n IP:ksi, niin saa ladata sieltä nuo datat */
+
     public HttpRequest(Context context) {
-        queue = Volley.newRequestQueue(context);
-        url = "http://10.0.2.2:8080/additives/";
+        this.queue = Volley.newRequestQueue(context);
+        this.url = "http://91.155.196.209:8080/AdditivesApi-1.0-SNAPSHOT/additives/";
     }
 
-    // GET request toimii!
-    public void getRequest() {
-        System.out.println("getRequest aktivoitu");
+
+    public void get(final VolleyResponseListener listener) {
+
+        // A request for retrieving a JSONArray response body at a given URL.
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                System.out.println("RESPONSE: " + response);
+                listener.onVolleySuccess(response);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                System.out.println("ERRORLISTENER: EI TOIMINUT");
+                System.out.println("JsonArrayRequest failed.");
             }
-
         });
         queue.add(jsonArrayRequest);
     }
