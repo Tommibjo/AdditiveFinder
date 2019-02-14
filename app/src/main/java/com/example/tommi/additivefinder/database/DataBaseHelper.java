@@ -1,13 +1,11 @@
 package com.example.tommi.additivefinder.database;
 
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
-
 import com.example.tommi.additivefinder.httprequests.HttpRequest;
+import com.example.tommi.additivefinder.httprequests.SqlQueries;
 import com.example.tommi.additivefinder.httprequests.VolleyResponseListener;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,7 +41,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                         JSONObject obj = response.getJSONObject(i);
                         String elga = obj.getString("elga");
                         String competitor = obj.getString("competitor");
-                        db.execSQL(insertInto(elga,competitor));
+                        db.execSQL(SqlQueries.insertInto(elga,competitor));
                     }
                 } catch (JSONException e) {
                     System.out.println("Error: " + e);
@@ -58,32 +56,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     }
 
-
-
-
-    /*
-     *
-     * Pitäisi laittaa omaan luokkaansa
-     *
-     * */
-
-
-    public Cursor getCorrespondingElga(String competitorsAdditive) {
-        System.out.println("GetData käynnissä");
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor res = db.rawQuery("SELECT elga FROM additives WHERE competitor LIKE ?", new String[]{"%" + competitorsAdditive + "%"});
-        return res;
+    public SQLiteDatabase getDatabase(){
+        return this.getReadableDatabase();
     }
-
-    public String insertInto(String elga, String competitor) {
-        System.out.println("insertInto käynnissä");
-        String SQL_INSERT_ENTRIES = "INSERT INTO " + Contract.ContractEntry.TABLE_NAME + " (" +
-                Contract.ContractEntry.COLUMN_NAME_COMPETITOR + " ," +
-                Contract.ContractEntry.COLUMN_NAME_ELGA + ") " +
-                "VALUES (" + "'" + competitor + "'," + "'" + elga + "')";
-        return SQL_INSERT_ENTRIES;
-    }
-
 }
 

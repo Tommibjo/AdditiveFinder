@@ -5,10 +5,9 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
-
 import java.util.ArrayList;
-
 import com.example.tommi.additivefinder.database.*;
+import com.example.tommi.additivefinder.httprequests.SqlQueries;
 
 import android.database.Cursor;
 
@@ -37,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 System.out.println("onQueryTextSubmit: " + query);
-                Cursor cursor = dataBaseHelper.getCorrespondingElga(query);
+                Cursor cursor = SqlQueries.getCorrespondingElga(dataBaseHelper.getDatabase(), query);
                 if (cursor.moveToFirst()) {
                     String outcome = cursor.getString(cursor.getColumnIndex("elga"));
                     searchResult.clear();
