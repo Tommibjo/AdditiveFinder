@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
+
 import java.util.ArrayList;
+
 import com.example.tommi.additivefinder.database.*;
 
 import android.database.Cursor;
@@ -20,30 +22,29 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        searchView = findViewById(R.id.searchView);
-        searchView.setIconified(false);
-        searchView.setQueryHint("Kilpailijan lisäaine tähän.");
-        searchResult = new ArrayList<>();
         setContentView(R.layout.activity_main);
-        listView = findViewById(R.id.listView);
-
-        dataBaseHelper = new DataBaseHelper(this);
-        dataBaseHelper.getWritableDatabase();
+        this.searchResult = new ArrayList<>();
+        this.searchView = findViewById(R.id.searchView);
+        this.searchView.setIconified(false);
+        this.searchView.setQueryHint("Kilpailijan lisäaine tähän.");
+        this.listView = findViewById(R.id.listView);
+        this.dataBaseHelper = new DataBaseHelper(this);
+        this.dataBaseHelper.getWritableDatabase();
 
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
             @Override
             public boolean onQueryTextSubmit(String query) {
                 System.out.println("onQueryTextSubmit: " + query);
                 Cursor cursor = dataBaseHelper.getCorrespondingElga(query);
-                if(cursor.moveToFirst()){
+                if (cursor.moveToFirst()) {
                     String outcome = cursor.getString(cursor.getColumnIndex("elga"));
                     searchResult.clear();
                     searchResult.add(outcome);
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, searchResult);
                     listView.setAdapter(adapter);
-                }else{
+                } else {
                     searchResult.clear();
                     searchResult.add("Ei tuloksia haulla.");
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, searchResult);
@@ -57,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
                 listView.setAdapter(null);
                 return false;
             }
+
         });
+
     }
 }

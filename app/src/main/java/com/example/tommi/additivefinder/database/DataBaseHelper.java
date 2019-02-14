@@ -13,14 +13,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-/*
-* Tämä luokka perii SQLiteOpenHelper luokan toiminnallisuudet:
-*  ->onCreate
-*  ->onUpgrade
-*
-* "Helper class to manage database creation and version management."
-* - https://www.tutorialspoint.com/http/http_requests.htm
-* */
 public class DataBaseHelper extends SQLiteOpenHelper {
 
 
@@ -31,10 +23,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             Contract.ContractEntry._ID + " INTEGER PRIMARY KEY," +
             Contract.ContractEntry.COLUMN_NAME_ELGA + " TEXT," +
             Contract.ContractEntry.COLUMN_NAME_COMPETITOR + " TEXT)";
-
-
-
-    // httpRequest olio hallinnoi Rasperry HTTP yhteyksiä.
     private HttpRequest httpRequest;
 
     public DataBaseHelper(Context context) {
@@ -43,12 +31,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     }
 
-
-
-    // OnCreate (SQLiteOpenHelper yliluokan metodi).
     @Override
-    public void onCreate(SQLiteDatabase db) {
-        System.out.println("OnCreate kutsuttu");
+    public void onCreate(final SQLiteDatabase db) {
+        db.execSQL(SQL_CREATE_ENTRIES);
         httpRequest.get(new VolleyResponseListener() {
 
             @Override
@@ -56,26 +41,17 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 try {
                     for (int i = 0; i < response.length(); i++) {
                         JSONObject obj = response.getJSONObject(i);
-                        String id = obj.getString("id");
                         String elga = obj.getString("elga");
                         String competitor = obj.getString("competitor");
-                        System.out.println("JSON to string: " + id + ": " + elga + " = " + competitor);
+                        db.execSQL(insertInto(elga,competitor));
                     }
                 } catch (JSONException e) {
                     System.out.println("Error: " + e);
                 }
             }
         });
-
-        // Luodaan database (sql
-        db.execSQL(SQL_CREATE_ENTRIES);
-        db.execSQL(insertInto("elga1", "kilpailija1"));
-        db.execSQL(insertInto("elga1", "kiplailija2"));
-        db.execSQL(insertInto("elga2", "kilpailija1"));
-        db.execSQL(insertInto("elga2", "kiplailija2"));
     }
 
-    // OnCreate (SQLiteOpenHelper yliluokan metodi.
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         System.out.println("onUpgrade juoksee nyt");
